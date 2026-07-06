@@ -12,7 +12,7 @@ It works on demos, live streams, screen recordings, and pair debugging.
 
 Some things get caught automatically with no setup at all:
 
-- Account ID, both the raw `222634390360` and the dashed `2226-3439-0360` form
+- Account ID, both the raw `123456789012` and the dashed `1234-5678-9012` form
 - Any ARN on any dashboard, like `arn:aws:cloudfront::...`, `arn:aws:s3:::...`,
   or IAM ARNs
 

@@ -6,7 +6,7 @@
  *
  * Detection strategy:
  *   1. PATTERNS (no input needed):
- *        - 12-digit AWS account IDs, raw or dashed (222634390360 / 2226-3439-0360)
+ *        - 12-digit AWS account IDs, raw or dashed (123456789012 / 1234-5678-9012)
  *        - Full ARNs (arn:aws:service::account:resource...)
  *   2. AUTO-LEARN (no input needed):
  *        - AWS renders sensitive values next to fixed labels in the account
