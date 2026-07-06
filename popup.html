@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AWS Console Privacy Mask</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>AWS Privacy Mask</h1>
+      <label class="switch">
+        <input type="checkbox" id="enabled" />
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <section class="toggles">
+      <label class="row">
+        <input type="checkbox" id="maskAccountId" />
+        <span>Mask account ID (12-digit / dashed)</span>
+      </label>
+      <label class="row">
+        <input type="checkbox" id="maskArns" />
+        <span>Mask ARNs</span>
+      </label>
+      <label class="row">
+        <input type="checkbox" id="autoLearn" />
+        <span>Auto-detect account name &amp; federated user</span>
+      </label>
+      <p class="hint">
+        Auto-detect reads values next to labels like "Account name" and
+        "Federated user" in the account menu, then hides them everywhere.
+        Open the account menu once so it can learn them.
+      </p>
+    </section>
+
+    <details class="custom">
+      <summary>Advanced: extra terms to hide</summary>
+      <p class="hint">
+        Optional. Only needed if something isn't caught automatically. One per
+        line.
+      </p>
+      <textarea
+        id="customTerms"
+        rows="4"
+        placeholder="e.g. a project codename"
+      ></textarea>
+      <button id="save">Save</button>
+      <span id="status" class="status"></span>
+    </details>
+
+    <footer>
+      <p>Works on AWS console pages. Reload a tab if it was already open.</p>
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

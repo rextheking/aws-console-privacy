@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "AWS Console Privacy Mask",
+  "version": "1.0.0",
+  "description": "Masks sensitive AWS console info (account ID, account name, federated user, ARNs) with asterisks for safe screen sharing.",
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "AWS Console Privacy Mask",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.console.aws.amazon.com/*",
+        "https://console.aws.amazon.com/*",
+        "https://*.aws.amazon.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Node (only if you later add build tooling)
+node_modules/
+npm-debug.log*
+
+# Packaged extension
+*.zip
+*.crx
+*.pem
