@@ -1,74 +1,75 @@
 # AWS Console Privacy Mask
 
-A lightweight Chrome extension (Manifest V3) that masks sensitive AWS Management
-Console information with asterisks (`*`) so you can safely share your screen.
+A Chrome extension that replaces sensitive info in the AWS console with
+asterisks (`*`) so you can share your screen without leaking account details.
 
-Great for demos, live streams, screen recordings, and pair-debugging where you
-don't want to leak account details.
+I built this because I kept flashing my account ID and ARNs on calls and
+recordings. Now they just show up as `*` and I don't have to think about it.
+
+It works on demos, live streams, screen recordings, and pair debugging.
 
 ## What it hides
 
-**Automatically, no configuration:**
+Some things get caught automatically with no setup at all:
 
-- **Account ID** — both the raw `222634390360` and dashed `2226-3439-0360` forms
-- **ARNs** — any `arn:aws:...` string on any dashboard (e.g. CloudFront, S3, IAM)
+- Account ID, both the raw `222634390360` and the dashed `2226-3439-0360` form
+- Any ARN on any dashboard, like `arn:aws:cloudfront::...`, `arn:aws:s3:::...`,
+  or IAM ARNs
 
-**Automatically, via label self-learning:**
+A couple of things can't be guessed from a pattern because they're just
+arbitrary text: your account name (like `my-account-name`) and your federated
+user, IAM user, or assumed role (like `Admin/my-role`). For those, the
+extension reads the value sitting next to AWS's own labels ("Account name",
+"Federated user", and so on) in the account menu, remembers it, and hides it
+everywhere else it shows up, including the account tab in the top nav. Open the
+account menu once and it figures the rest out.
 
-- **Account name** (e.g. `my-account-name`)
-- **Federated user / IAM user / assumed role** (e.g. `Admin/my-role`)
-
-  These are arbitrary strings, so they can't be matched by a pattern. Instead the
-  extension reads the value shown next to AWS's fixed labels ("Account name",
-  "Federated user", etc.) in the account menu, remembers it, and masks it
-  everywhere it appears — including the top navigation account tab. Just open the
-  account menu once so it can learn them.
-
-**Manually (optional fallback):**
-
-- Any extra term you enter in the popup's Advanced section.
+If something slips through, there's an Advanced box in the popup where you can
+type extra terms to hide.
 
 ## How it works
 
-- A content script walks the page's text nodes and replaces sensitive values
-  with `*`, preserving layout (dashes in account IDs are kept so the shape stays
-  familiar).
-- A `MutationObserver` re-applies masking as the console re-renders and when you
-  switch dashboards (it's a single-page app).
-- Original values are stashed per text node, so toggling the extension off
-  restores them instantly. Nothing is sent anywhere — all processing is local.
+A content script walks the text on the page and swaps sensitive values for `*`.
+It keeps the dashes in account IDs so the shape still looks familiar. A
+MutationObserver re-runs the masking whenever the console re-renders or you jump
+to a different dashboard, since the console is a single page app.
 
-## Install (from source)
+The original text is kept in memory per node, so flipping the extension off puts
+everything back right away. Nothing leaves your browser.
 
-1. Clone or download this repository.
+## Install from source
+
+1. Clone or download this repo.
 2. Open `chrome://extensions` in Chrome.
-3. Enable **Developer mode** (top-right).
-4. Click **Load unpacked** and select the `aws-console-privacy` folder.
-5. Open the AWS console. Click your account menu once so the extension can learn
-   your account name and federated user. Everything sensitive becomes `*`.
+3. Turn on Developer mode in the top right.
+4. Click Load unpacked and pick the `aws-console-privacy` folder.
+5. Open the AWS console and click your account menu once so it can learn your
+   account name and federated user. After that, the sensitive bits show as `*`.
 
 ## Usage
 
-- Click the extension icon to open the popup.
-- Toggle the whole extension on/off with the top switch.
-- Fine-tune what gets masked (account ID, ARNs, auto-detect) with the checkboxes.
-- Use the **Advanced** section only if something isn't caught automatically.
+Click the extension icon to open the popup. The top switch turns the whole thing
+on or off. The checkboxes let you decide what gets masked (account ID, ARNs,
+auto-detect). The Advanced section is only there for the rare thing that isn't
+caught on its own.
 
 ## Privacy
 
-This extension does not collect, transmit, or store any data remotely. All
-masking happens in your browser. Settings are saved via Chrome's `storage.sync`
-so they follow your Chrome profile.
+Nothing is collected or sent anywhere. All the masking happens locally in your
+browser. Your settings are saved with Chrome's `storage.sync` so they follow
+your profile.
 
 ## Limitations
 
-- Auto-detection relies on AWS's label text. If AWS renames a label, that value
-  won't be learned until you reopen the account menu; worst case, add it in the
-  Advanced box. Pattern-based masking (account ID, ARNs) does not depend on
-  labels and always works.
-- Masking is visual only. It does not prevent the values from existing in the
-  page's underlying data or network responses.
+Auto-detection leans on AWS's label text. If AWS renames a label, that value
+won't get learned until you reopen the account menu, and in the worst case you
+can drop it into the Advanced box. The pattern matching for account IDs and ARNs
+doesn't depend on labels, so that part always works.
+
+Also worth saying: this is a visual mask only. The real values still exist in
+the page's underlying data and in network responses. It's meant for screen
+sharing, not as a security boundary.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
